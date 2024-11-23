@@ -39,8 +39,10 @@ public class LoginApprovedTest {
 
     @Test
     public void invalidLogin_MissingEmail() {
+        // Automatically extract the test name from the method name
+        String testName = new Object(){}.getClass().getEnclosingMethod().getName();
+
         // Initialize the test in ExtentReports
-        String testName = "invalidLogin_MissingEmail";
         ScreenshotReportUtils.startTest(driver, classFolderPath, this.getClass().getSimpleName(), testName);
 
         // Perform test logic
@@ -54,8 +56,10 @@ public class LoginApprovedTest {
 
     @Test
     public void invalidLogin_InvalidEmail() {
+        // Automatically extract the test name from the method name
+        String testName = new Object(){}.getClass().getEnclosingMethod().getName();
+
         // Initialize the test in ExtentReports
-        String testName = "invalidLogin_InvalidEmail";
         ScreenshotReportUtils.startTest(driver, classFolderPath, this.getClass().getSimpleName(), testName);
 
         // Perform test logic
@@ -69,8 +73,10 @@ public class LoginApprovedTest {
 
     @Test
     public void invalidLogin_InvalidPassword() {
+        // Automatically extract the test name from the method name
+        String testName = new Object(){}.getClass().getEnclosingMethod().getName();
+
         // Initialize the test in ExtentReports
-        String testName = "invalidLogin_InvalidPassword";
         ScreenshotReportUtils.startTest(driver, classFolderPath, this.getClass().getSimpleName(), testName);
 
         // Perform test logic
@@ -84,18 +90,16 @@ public class LoginApprovedTest {
 
     @AfterMethod
     public void tearDown(ITestResult result) {
-        // Log failure if the test fails
         if (result.getStatus() == ITestResult.FAILURE) {
-            ScreenshotReportUtils.logFailureWithScreenshot(
-                    driver, result.getName(), result.getThrowable());
+            // Capture screenshot on failure
+            ScreenshotReportUtils.logFailureWithScreenshot(driver, result.getName(), result.getThrowable());
         }
 
-        // Finalize the ExtentReport for this test
+        // End the test and flush the ExtentReport
         ScreenshotReportUtils.endTest();
 
-        // Close the WebDriver
         if (driver != null) {
-            driver.quit();
+            driver.quit(); // Close WebDriver
         }
     }
 }
