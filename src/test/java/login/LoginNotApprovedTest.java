@@ -94,7 +94,6 @@ public class LoginNotApprovedTest {
             // Capture screenshot on failure
             ScreenshotReportUtils.logFailureWithScreenshot(driver, result.getName(), result.getThrowable());
         }
-
         // End the test and flush the ExtentReport
         ScreenshotReportUtils.endTest();
 
