@@ -20,6 +20,18 @@ public class ScreenshotReportUtils {
     private static String currentTestCaseFolderPath;
     private static String screenshotFolderPath;
 
+    // Initialize ExtentReports only once
+    public static ExtentReports getExtentReportsInstance(String classFolderPath, String className, String testName) {
+        if (extent == null) {
+            String reportPath = classFolderPath + "/" + className + "_" + testName + ".html";
+            ExtentSparkReporter sparkReporter = new ExtentSparkReporter(reportPath);
+
+            extent = new ExtentReports();
+            extent.attachReporter(sparkReporter);
+        }
+        return extent;
+    }
+
     public static String createClassFolder(String className) {
         String baseDir = System.getProperty("user.dir") + "/src/test/resources/testresults/";
         String classFolderPath = baseDir + className;
@@ -76,13 +88,10 @@ public class ScreenshotReportUtils {
         String testCaseFolder = createTestCaseFolder(classFolderPath, testName);
         createScreenshotFolder(testCaseFolder);
 
-        // Set up Extent Report
-        String reportPath = testCaseFolder + "/" + className + "_" + testName + ".html";
-        ExtentSparkReporter sparkReporter = new ExtentSparkReporter(reportPath);
+        // Initialize ExtentReports only once
+        extent = getExtentReportsInstance(classFolderPath, className, testName);
 
-        extent = new ExtentReports();
-        extent.attachReporter(sparkReporter);
-
+        // Create a new test in the report
         currentTest = extent.createTest(testName);
     }
 
@@ -97,6 +106,7 @@ public class ScreenshotReportUtils {
         currentTest.fail(throwable);
     }
 
+    // Flush report only once at the end of the tests
     public static void endTest() {
         if (extent != null) {
             extent.flush();
