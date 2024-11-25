@@ -17,13 +17,15 @@ public class ScreenshotReportUtils {
 
     private static ExtentReports extent;
     private static ExtentTest currentTest;
-    private static String currentTestCaseFolderPath;
-    private static String screenshotFolderPath;
+    private static String runFolderPath;        // Single folder for the test run
+    private static String screenshotFolderPath; // Folder for screenshots
+    private static String runId;                // Unique run identifier (timestamp)
 
-    // Initialize ExtentReports only once
-    public static ExtentReports getExtentReportsInstance(String classFolderPath, String className, String testName) {
+    // Initialize ExtentReports once per test run
+    public static ExtentReports getExtentReportsInstance() {
         if (extent == null) {
-            String reportPath = classFolderPath + "/" + className + "_" + testName + ".html";
+            // Use the run_id as the report name
+            String reportPath = runFolderPath + "/run_" + runId + ".html";
             ExtentSparkReporter sparkReporter = new ExtentSparkReporter(reportPath);
 
             extent = new ExtentReports();
@@ -32,46 +34,32 @@ public class ScreenshotReportUtils {
         return extent;
     }
 
-    public static String createClassFolder(String className) {
-        String baseDir = System.getProperty("user.dir") + "/src/test/resources/testresults/";
-        String classFolderPath = baseDir + className;
+    // Create a single folder for the entire test run
+    public static String createRunFolder() {
+        if (runFolderPath == null) {
+            String baseDir = System.getProperty("user.dir") + "/src/test/resources/testresults/";
+            runId = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+            runFolderPath = baseDir + "run_" + runId;
 
-        File classFolder = new File(classFolderPath);
-        if (!classFolder.exists()) {
-            classFolder.mkdirs();
+            File runFolder = new File(runFolderPath);
+            if (!runFolder.exists()) {
+                runFolder.mkdirs();
+            }
+
+            // Create the screenshots subfolder
+            screenshotFolderPath = runFolderPath + "/screenshots";
+            File screenshotsFolder = new File(screenshotFolderPath);
+            if (!screenshotsFolder.exists()) {
+                screenshotsFolder.mkdirs();
+            }
         }
-
-        return classFolderPath;
+        return runFolderPath;
     }
 
-    public static String createTestCaseFolder(String classFolderPath, String testName) {
-        String timestamp = new SimpleDateFormat("MM_dd_HH_mm_ss").format(new Date());
-        String testCaseFolderPath = classFolderPath + "/" + testName + "_" + timestamp;
-
-        File testCaseFolder = new File(testCaseFolderPath);
-        if (!testCaseFolder.exists()) {
-            testCaseFolder.mkdirs();
-        }
-
-        currentTestCaseFolderPath = testCaseFolderPath; // Set the current test folder
-        return testCaseFolderPath;
-    }
-
-    public static String createScreenshotFolder(String testCaseFolderPath) {
-        String screenshotFolderPath = testCaseFolderPath + "/screenshots";
-
-        File screenshotFolder = new File(screenshotFolderPath);
-        if (!screenshotFolder.exists()) {
-            screenshotFolder.mkdirs();
-        }
-
-        ScreenshotReportUtils.screenshotFolderPath = screenshotFolderPath; // Set the screenshot folder
-        return screenshotFolderPath;
-    }
-
-    public static String takeScreenshot(WebDriver driver, String screenshotFolderPath, String className, String testName) {
-        String timestamp = new SimpleDateFormat("MM_dd_HH_mm_ss").format(new Date());
-        String screenshotPath = screenshotFolderPath + "/" + className + "_" + testName + "_" + timestamp + ".png";
+    // Capture and save a screenshot
+    public static String takeScreenshot(WebDriver driver, String screenshotName) {
+        String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String screenshotPath = screenshotFolderPath + "/" + screenshotName + "_" + timestamp + ".png";
 
         File srcFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
         try {
@@ -83,31 +71,34 @@ public class ScreenshotReportUtils {
         return screenshotPath;
     }
 
-    public static void startTest(WebDriver driver, String classFolderPath, String className, String testName) {
-        // Create test case and screenshot folders
-        String testCaseFolder = createTestCaseFolder(classFolderPath, testName);
-        createScreenshotFolder(testCaseFolder);
+    // Start a new test case in the Extent Report
+    public static void startTest(String testName) {
+        if (runFolderPath == null) {
+            createRunFolder(); // Ensure the run folder is created
+        }
 
-        // Initialize ExtentReports only once
-        extent = getExtentReportsInstance(classFolderPath, className, testName);
+        // Initialize ExtentReports if not already done
+        extent = getExtentReportsInstance();
 
         // Create a new test in the report
         currentTest = extent.createTest(testName);
     }
 
+    // Log success with a screenshot
     public static void logSuccessWithScreenshot(WebDriver driver, String message) {
-        String screenshotPath = takeScreenshot(driver, screenshotFolderPath, "Success", "Step");
+        String screenshotPath = takeScreenshot(driver, "Success");
         currentTest.pass(message).addScreenCaptureFromPath(screenshotPath);
     }
 
-    public static void logFailureWithScreenshot(WebDriver driver, String testName, Throwable throwable) {
-        String screenshotPath = takeScreenshot(driver, screenshotFolderPath, "Failure", testName);
+    // Log failure with a screenshot
+    public static void logFailureWithScreenshot(WebDriver driver, Throwable throwable) {
+        String screenshotPath = takeScreenshot(driver, "Failure");
         currentTest.fail("Test failed").addScreenCaptureFromPath(screenshotPath);
         currentTest.fail(throwable);
     }
 
-    // Flush report only once at the end of the tests
-    public static void endTest() {
+    // Flush the report at the end of the test run
+    public static void endTestRun() {
         if (extent != null) {
             extent.flush();
         }

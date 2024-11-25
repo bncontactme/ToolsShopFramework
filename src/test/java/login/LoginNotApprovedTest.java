@@ -17,7 +17,6 @@ public class LoginNotApprovedTest {
     protected WebDriver driver;
     private LoginPage loginPage;
     private Map<String, LoginMappingData> testCases;
-    private String classFolderPath;
 
     @BeforeMethod
     public void setUp() throws IOException {
@@ -32,17 +31,17 @@ public class LoginNotApprovedTest {
         testCases = JsonReaderUtils.getTestCasesMap(
                 "src/test/resources/logintests/loginTestData.json", LoginMappingData.class);
 
-        // Create a folder for the test class
-        String className = this.getClass().getSimpleName();
-        classFolderPath = ScreenshotReportUtils.createClassFolder(className);
+        // Initialize the single run folder at the start of the test run
+        ScreenshotReportUtils.createRunFolder();
     }
 
     @Test
     public void invalidLogin_MissingEmail() {
-        String testName = new Object(){}.getClass().getEnclosingMethod().getName();
+        // Get the current test method name
+        String testName = new Object() {}.getClass().getEnclosingMethod().getName();
 
         // Initialize the test in ExtentReports
-        ScreenshotReportUtils.startTest(driver, classFolderPath, this.getClass().getSimpleName(), testName);
+        ScreenshotReportUtils.startTest(testName);
 
         // Perform test logic
         LoginMappingData testData = testCases.get(testName);
@@ -55,10 +54,11 @@ public class LoginNotApprovedTest {
 
     @Test
     public void invalidLogin_InvalidEmail() {
-        String testName = new Object(){}.getClass().getEnclosingMethod().getName();
+        // Get the current test method name
+        String testName = new Object() {}.getClass().getEnclosingMethod().getName();
 
         // Initialize the test in ExtentReports
-        ScreenshotReportUtils.startTest(driver, classFolderPath, this.getClass().getSimpleName(), testName);
+        ScreenshotReportUtils.startTest(testName);
 
         // Perform test logic
         LoginMappingData testData = testCases.get(testName);
@@ -71,10 +71,11 @@ public class LoginNotApprovedTest {
 
     @Test
     public void invalidLogin_InvalidPassword() {
-        String testName = new Object(){}.getClass().getEnclosingMethod().getName();
+        // Get the current test method name
+        String testName = new Object() {}.getClass().getEnclosingMethod().getName();
 
         // Initialize the test in ExtentReports
-        ScreenshotReportUtils.startTest(driver, classFolderPath, this.getClass().getSimpleName(), testName);
+        ScreenshotReportUtils.startTest(testName);
 
         // Perform test logic
         LoginMappingData testData = testCases.get(testName);
@@ -89,10 +90,8 @@ public class LoginNotApprovedTest {
     public void tearDown(ITestResult result) {
         if (result.getStatus() == ITestResult.FAILURE) {
             // Capture screenshot on failure
-            ScreenshotReportUtils.logFailureWithScreenshot(driver, result.getName(), result.getThrowable());
+            ScreenshotReportUtils.logFailureWithScreenshot(driver, result.getThrowable());
         }
-        // End the test and flush the ExtentReport
-        ScreenshotReportUtils.endTest();
 
         if (driver != null) {
             driver.quit(); // Close WebDriver
@@ -102,6 +101,6 @@ public class LoginNotApprovedTest {
     @AfterClass
     public void flushReports() {
         // Flush the ExtentReports once after all tests are finished
-        ScreenshotReportUtils.endTest();
+        ScreenshotReportUtils.endTestRun();
     }
 }
