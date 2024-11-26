@@ -1,0 +1,14 @@
+<suite name="Login Suite">
+    <test name="Login Tests">
+        <!-- Specify the groups to run -->
+        <groups>
+            <run>
+                <include name="login" />
+            </run>
+        </groups>
+        <classes>
+            <class name="testscripts.logintest.LoginNotApprovedTest" />
+            <class name="testscripts.logintest.LoginApprovedTest" />
+        </classes>
+    </test>
+</suite>
