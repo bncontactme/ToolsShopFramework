@@ -1,11 +1,11 @@
-package login;
+package testscripts.logintest;
 
 public class LoginMappingData {
     private String testName;
     private String email;
     private String password;
 
-    // Default constructor (required by Jackson)
+    // Default constructor
     public LoginMappingData() {}
 
     // Getters and setters

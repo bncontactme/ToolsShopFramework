@@ -1,0 +1,7 @@
+{
+  "carCheckout": {
+    "testName": "validLogin",
+    "email": "validuser@example.com",
+    "password": "323f1"
+  }
+}
