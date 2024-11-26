@@ -15,6 +15,7 @@ import java.util.Date;
 
 public class ScreenshotReportUtils {
 
+
     private static ExtentReports extent;
     private static ExtentTest currentTest;
     private static String runFolderPath;        // Single folder for the test run

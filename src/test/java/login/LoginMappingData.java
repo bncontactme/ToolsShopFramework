@@ -5,7 +5,7 @@ public class LoginMappingData {
     private String email;
     private String password;
 
-    // Default constructor (required by Jackson)
+    // Default constructor
     public LoginMappingData() {}
 
     // Getters and setters

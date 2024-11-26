@@ -7,7 +7,6 @@ import java.util.Map;
 
 public class JsonReaderUtils {
 
-    // Method to read test cases and map them directly to test names for fast lookup
     public static <T> Map<String, T> getTestCasesMap(String filePath, Class<T> clazz) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         // Deserialize the JSON file into a Map

@@ -18,8 +18,9 @@ public class LoginNotApprovedTest {
     private LoginPage loginPage;
     private Map<String, LoginMappingData> testCases;
 
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true)
     public void setUp() throws IOException {
+
         // Initialize WebDriver and LoginPage
         driver = utils.WebDriverUtils.getDriver();
         loginPage = new LoginPage(driver);
@@ -37,10 +38,8 @@ public class LoginNotApprovedTest {
 
     @Test(groups = {"invalidLogin"})
     public void invalidLogin_MissingEmail() {
-        // Get the current test method name
+        // Get the current test method name & Initialize the test in ExtentReports
         String testName = new Object() {}.getClass().getEnclosingMethod().getName();
-
-        // Initialize the test in ExtentReports
         ScreenshotReportUtils.startTest(testName);
 
         // Perform test logic
@@ -54,10 +53,8 @@ public class LoginNotApprovedTest {
 
     @Test(groups = {"invalidLogin"})
     public void invalidLogin_InvalidEmail() {
-        // Get the current test method name
+        // Get the current test method name & Initialize the test in ExtentReports
         String testName = new Object() {}.getClass().getEnclosingMethod().getName();
-
-        // Initialize the test in ExtentReports
         ScreenshotReportUtils.startTest(testName);
 
         // Perform test logic
@@ -71,22 +68,18 @@ public class LoginNotApprovedTest {
 
     @Test(groups = {"invalidLogin"})
     public void invalidLogin_InvalidPassword() {
-        // Get the current test method name
+        // Get the current test method name & Initialize the test in ExtentReports
         String testName = new Object() {}.getClass().getEnclosingMethod().getName();
-
-        // Initialize the test in ExtentReports
         ScreenshotReportUtils.startTest(testName);
 
         // Perform test logic
         LoginMappingData testData = testCases.get(testName);
         loginPage.performFullLogin(testData.getEmail(), testData.getPassword());
         loginPage.verifyErrorMessagePassword();
-
-        // Log success and take a screenshot
         ScreenshotReportUtils.logSuccessWithScreenshot(driver, "Verified error message for invalid password.");
     }
 
-    @AfterMethod
+    @AfterMethod(alwaysRun = true)
     public void tearDown(ITestResult result) {
         if (result.getStatus() == ITestResult.FAILURE) {
             // Capture screenshot on failure
@@ -94,11 +87,11 @@ public class LoginNotApprovedTest {
         }
 
         if (driver != null) {
-            driver.quit(); // Close WebDriver
+            driver.quit();
         }
     }
 
-    @AfterClass
+    @AfterClass(alwaysRun = true)
     public void flushReports() {
         // Flush the ExtentReports once after all tests are finished
         ScreenshotReportUtils.endTestRun();

@@ -1,13 +1,14 @@
 <suite name="Login Suite">
     <test name="Login Tests">
+        <!-- Specify the groups to run -->
+        <groups>
+            <run>
+                <include name="invalidLogin" />
+                <include name="initialization" />
+            </run>
+        </groups>
         <classes>
-            <class name="login.LoginNotApprovedTest">
-                <methods>
-                    <include name="invalidLogin_MissingEmail" />
-                    <include name="invalidLogin_InvalidEmail" />
-                    <include name="invalidLogin_InvalidPassword" />
-                </methods>
-            </class>
+            <class name="login.LoginNotApprovedTest" />
         </classes>
     </test>
 </suite>

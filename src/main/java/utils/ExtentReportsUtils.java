@@ -11,7 +11,7 @@ public class ExtentReportsUtils {
     private static ExtentReports extent;
     private static ExtentTest test;
 
-    // This method will create and return a singleton instance of ExtentReports
+    // This method will create and return a instance of ExtentReports
     public static ExtentReports getInstance(String folderPath) {
         if (extent == null) {
             // Create the folder for the report if it doesn't exist
@@ -36,13 +36,13 @@ public class ExtentReportsUtils {
         return extent;
     }
 
-    // This method creates a test within the report
+    // Create a test within the report
     public static ExtentTest createTest(String testName, String description, String folderPath) {
         test = getInstance(folderPath).createTest(testName, description);
         return test;
     }
 
-    // This method is used to flush the report and ensure it is written
+    // Flush the report and ensure it is written
     public static void flushReports() {
         if (extent != null) {
             extent.flush();
