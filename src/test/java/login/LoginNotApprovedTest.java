@@ -29,13 +29,13 @@ public class LoginNotApprovedTest {
 
         // Load test cases from JSON
         testCases = JsonReaderUtils.getTestCasesMap(
-                "src/test/resources/logintests/loginTestData.json", LoginMappingData.class);
+                "src/test/resources/testdata/logintestsdata/LoginTestData.json", LoginMappingData.class);
 
         // Initialize the single run folder at the start of the test run
         ScreenshotReportUtils.createRunFolder();
     }
 
-    @Test
+    @Test(groups = {"invalidLogin"})
     public void invalidLogin_MissingEmail() {
         // Get the current test method name
         String testName = new Object() {}.getClass().getEnclosingMethod().getName();
@@ -52,7 +52,7 @@ public class LoginNotApprovedTest {
         ScreenshotReportUtils.logSuccessWithScreenshot(driver, "Verified error message for missing email.");
     }
 
-    @Test
+    @Test(groups = {"invalidLogin"})
     public void invalidLogin_InvalidEmail() {
         // Get the current test method name
         String testName = new Object() {}.getClass().getEnclosingMethod().getName();
@@ -69,7 +69,7 @@ public class LoginNotApprovedTest {
         ScreenshotReportUtils.logSuccessWithScreenshot(driver, "Verified error message for invalid email.");
     }
 
-    @Test
+    @Test(groups = {"invalidLogin"})
     public void invalidLogin_InvalidPassword() {
         // Get the current test method name
         String testName = new Object() {}.getClass().getEnclosingMethod().getName();

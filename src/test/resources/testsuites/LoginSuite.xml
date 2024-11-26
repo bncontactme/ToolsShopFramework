@@ -1,0 +1,13 @@
+<suite name="Login Suite">
+    <test name="Login Tests">
+        <classes>
+            <class name="login.LoginNotApprovedTest">
+                <methods>
+                    <include name="invalidLogin_MissingEmail" />
+                    <include name="invalidLogin_InvalidEmail" />
+                    <include name="invalidLogin_InvalidPassword" />
+                </methods>
+            </class>
+        </classes>
+    </test>
+</suite>
