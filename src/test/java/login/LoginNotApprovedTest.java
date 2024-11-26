@@ -29,9 +29,9 @@ public class LoginNotApprovedTest {
 
         // Load test cases from JSON
         testCases = JsonReaderUtils.getTestCasesMap(
-                "src/test/resources/logintests/loginTestData.json", LoginMappingData.class);
+                "src/test/resources/testdata/logintestsdata/loginTestData.json", LoginMappingData.class);
 
-        // Initialize the single run folder at the start of the test run
+        // Ensure the single run folder is created (only needed once)
         ScreenshotReportUtils.createRunFolder();
     }
 
@@ -40,67 +40,81 @@ public class LoginNotApprovedTest {
         // Get the current test method name
         String testName = new Object() {}.getClass().getEnclosingMethod().getName();
 
-        // Initialize the test in ExtentReports
+        // Start the test in ExtentReports
         ScreenshotReportUtils.startTest(testName);
 
-        // Perform test logic
-        LoginMappingData testData = testCases.get(testName);
-        loginPage.performFullLogin(testData.getEmail(), testData.getPassword());
-        loginPage.verifyErrorMessageEmail();
+        try {
+            // Perform test logic
+            LoginMappingData testData = testCases.get(testName);
+            loginPage.performFullLogin(testData.getEmail(), testData.getPassword());
+            loginPage.verifyErrorMessageEmail();
 
-        // Log success and take a screenshot
-        ScreenshotReportUtils.logSuccessWithScreenshot(driver, "Verified error message for missing email.");
+            // Log success and take a screenshot
+            ScreenshotReportUtils.logSuccessWithScreenshot(driver, "Verified error message for missing email.");
+        } catch (Exception e) {
+            // Log failure if any exception occurs
+            ScreenshotReportUtils.logFailureWithScreenshot(driver, e);
+            throw e;
+        }
     }
 
     @Test
     public void invalidLogin_InvalidEmail() {
-        // Get the current test method name
         String testName = new Object() {}.getClass().getEnclosingMethod().getName();
 
-        // Initialize the test in ExtentReports
+        // Start the test in ExtentReports
         ScreenshotReportUtils.startTest(testName);
 
-        // Perform test logic
-        LoginMappingData testData = testCases.get(testName);
-        loginPage.performFullLogin(testData.getEmail(), testData.getPassword());
-        loginPage.verifyErrorMessageEmail();
+        try {
+            // Perform test logic
+            LoginMappingData testData = testCases.get(testName);
+            loginPage.performFullLogin(testData.getEmail(), testData.getPassword());
+            loginPage.verifyErrorMessageEmail();
 
-        // Log success and take a screenshot
-        ScreenshotReportUtils.logSuccessWithScreenshot(driver, "Verified error message for invalid email.");
+            // Log success and take a screenshot
+            ScreenshotReportUtils.logSuccessWithScreenshot(driver, "Verified error message for invalid email.");
+        } catch (Exception e) {
+            ScreenshotReportUtils.logFailureWithScreenshot(driver, e);
+            throw e;
+        }
     }
 
     @Test
     public void invalidLogin_InvalidPassword() {
-        // Get the current test method name
         String testName = new Object() {}.getClass().getEnclosingMethod().getName();
 
-        // Initialize the test in ExtentReports
+        // Start the test in ExtentReports
         ScreenshotReportUtils.startTest(testName);
 
-        // Perform test logic
-        LoginMappingData testData = testCases.get(testName);
-        loginPage.performFullLogin(testData.getEmail(), testData.getPassword());
-        loginPage.verifyErrorMessagePassword();
+        try {
+            // Perform test logic
+            LoginMappingData testData = testCases.get(testName);
+            loginPage.performFullLogin(testData.getEmail(), testData.getPassword());
+            loginPage.verifyErrorMessagePassword();
 
-        // Log success and take a screenshot
-        ScreenshotReportUtils.logSuccessWithScreenshot(driver, "Verified error message for invalid password.");
+            // Log success and take a screenshot
+            ScreenshotReportUtils.logSuccessWithScreenshot(driver, "Verified error message for invalid password.");
+        } catch (Exception e) {
+            ScreenshotReportUtils.logFailureWithScreenshot(driver, e);
+            throw e;
+        }
     }
 
     @AfterMethod
     public void tearDown(ITestResult result) {
         if (result.getStatus() == ITestResult.FAILURE) {
-            // Capture screenshot on failure
+            // Log failure with screenshot if the test fails
             ScreenshotReportUtils.logFailureWithScreenshot(driver, result.getThrowable());
         }
 
         if (driver != null) {
-            driver.quit(); // Close WebDriver
+            driver.quit(); // Close WebDriver instance
         }
     }
 
     @AfterClass
     public void flushReports() {
-        // Flush the ExtentReports once after all tests are finished
+        // Flush the ExtentReports at the end of the test class
         ScreenshotReportUtils.endTestRun();
     }
 }
