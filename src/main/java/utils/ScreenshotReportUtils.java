@@ -42,15 +42,15 @@ public class ScreenshotReportUtils {
             runFolderPath = baseDir + "run_" + runId;
 
             File runFolder = new File(runFolderPath);
-            if (!runFolder.exists()) {
-                runFolder.mkdirs();
+            if (!runFolder.exists() && !runFolder.mkdirs()) {
+                throw new RuntimeException("Failed to create run folder: " + runFolderPath);
             }
 
             // Create the screenshots subfolder
             screenshotFolderPath = runFolderPath + "/screenshots";
             File screenshotsFolder = new File(screenshotFolderPath);
-            if (!screenshotsFolder.exists()) {
-                screenshotsFolder.mkdirs();
+            if (!screenshotsFolder.exists() && !screenshotsFolder.mkdirs()) {
+                throw new RuntimeException("Failed to create screenshots folder: " + screenshotFolderPath);
             }
         }
         return runFolderPath;
@@ -65,6 +65,7 @@ public class ScreenshotReportUtils {
         try {
             FileUtils.copyFile(srcFile, new File(screenshotPath));
         } catch (IOException e) {
+            currentTest.warning("Failed to save screenshot: " + e.getMessage());
             e.printStackTrace();
         }
 
