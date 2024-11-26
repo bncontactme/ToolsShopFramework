@@ -1,4 +1,4 @@
-package login;
+package testscripts.logintest;
 
 import org.openqa.selenium.WebDriver;
 import org.testng.ITestResult;
@@ -9,11 +9,10 @@ import org.testng.annotations.Test;
 import pages.LoginPage;
 import utils.JsonReaderUtils;
 import utils.ExtentReportsUtils;
-
 import java.io.IOException;
 import java.util.Map;
 
-public class LoginNotApprovedTest {
+public class LoginApprovedTest {
     protected WebDriver driver;
     private LoginPage loginPage;
     private Map<String, LoginMappingData> testCases;
@@ -33,8 +32,8 @@ public class LoginNotApprovedTest {
 
     }
 
-    @Test(groups = {"invalidLogin"})
-    public void invalidLogin_MissingEmail() {
+    @Test(groups = {"login"})
+    public void validLogin() {
         // Get the current test method name & Initialize the test in ExtentReports
         String testName = new Object() {}.getClass().getEnclosingMethod().getName();
         ExtentReportsUtils.startTest(testName);
@@ -46,36 +45,6 @@ public class LoginNotApprovedTest {
 
         // Log success and take a screenshot (Debug)
         ExtentReportsUtils.logSuccessWithScreenshot(driver, "Verified error message for missing email.");
-    }
-
-    @Test(groups = {"invalidLogin"})
-    public void invalidLogin_InvalidEmail() {
-        // Get the current test method name & Initialize the test in ExtentReports
-        String testName = new Object() {}.getClass().getEnclosingMethod().getName();
-        ExtentReportsUtils.startTest(testName);
-
-        // Perform test logic
-        LoginMappingData testData = testCases.get(testName);
-        loginPage.performFullLogin(testData.getEmail(), testData.getPassword());
-        loginPage.verifyErrorMessageEmail();
-
-        // Log success and take a screenshot (Debug)
-        ExtentReportsUtils.logSuccessWithScreenshot(driver, "Verified error message for invalid email.");
-    }
-
-    @Test(groups = {"invalidLogin"})
-    public void invalidLogin_InvalidPassword() {
-        // Get the current test method name & Initialize the test in ExtentReports
-        String testName = new Object() {}.getClass().getEnclosingMethod().getName();
-        ExtentReportsUtils.startTest(testName);
-
-        // Perform test logic
-        LoginMappingData testData = testCases.get(testName);
-        loginPage.performFullLogin(testData.getEmail(), testData.getPassword());
-        loginPage.verifyErrorMessagePassword();
-
-        // Log success and take a screenshot (Debug)
-        ExtentReportsUtils.logSuccessWithScreenshot(driver, "Verified error message for invalid password.");
     }
 
     @AfterMethod(alwaysRun = true)

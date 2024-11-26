@@ -1,6 +1,6 @@
 package base;
 
-import login.LoginMappingData; //Update with you Data Map Import
+import testscripts.logintest.LoginMappingData; //Update with you Data Map Import
 import org.openqa.selenium.WebDriver;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterClass;

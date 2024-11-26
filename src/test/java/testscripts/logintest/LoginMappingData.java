@@ -1,4 +1,4 @@
-package login;
+package testscripts.logintest;
 
 public class LoginMappingData {
     private String testName;

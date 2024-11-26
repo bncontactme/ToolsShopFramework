@@ -3,12 +3,12 @@
         <!-- Specify the groups to run -->
         <groups>
             <run>
-                <include name="invalidLogin" />
-                <include name="initialization" />
+                <include name="login" />
             </run>
         </groups>
         <classes>
-            <class name="login.LoginNotApprovedTest" />
+            <class name="testscripts.logintest.LoginNotApprovedTest" />
+            <class name="testscripts.logintest.LoginApprovedTest" />
         </classes>
     </test>
 </suite>
